@@ -95,4 +95,15 @@ conda install pytorch torchvision -c pytorch
 
 > Tip: might want to delete the zip files of things if you're space-constrained
 
+Finally, download dogscats dataset
+
+```bash
+mkdir ~/data
+cd data
+wget http://files.fast.ai/data/dogscats.zip
+unzip -q dogscats.zip
+
+ln -s ~/data ~/fastai/courses/dl1/data
+```
+
 # 2. [Setup for remote Jupyter notebook](https://amber-md.github.io/pytraj/latest/tutorials/remote_jupyter_notebook)
