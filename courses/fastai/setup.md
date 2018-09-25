@@ -49,7 +49,11 @@ source ~/.bashrc
 jupyter notebook --generate-config
 echo "c.NotebookApp.ip = '*'" >> ~/.jupyter/jupyter_notebook_config.py
 echo "c.NotebookApp.open_browser = False" >> ~/.jupyter/jupyter_notebook_config.py
+echo "c.NotebookApp.allow_remote_access = True" >> ~/.jupyter/jupyter_notebook_config.py
+
+pip install --upgrade pip
 pip install ipywidgets
+
 jupyter nbextension enable --py widgetsnbextension --sys-prefix
 ```
 
@@ -62,9 +66,12 @@ It probably wont, at which point:
 
 ```bash
 # in the fastai/ directory...
+conda install -c anaconda bcolz
+```
 
-pip install --upgrade pip
+Try the notebook again, if not
 
+```bash
 pip install isoweek
 pip install sklearn_pandas
 pip install graphviz
@@ -80,7 +87,6 @@ pip install kaggle-cli
 pip install pdpbox
 pip install seaborn
 
-conda install -c anaconda bcolz
 conda install mkl=2018
 conda install pytorch torchvision -c pytorch
 ```
