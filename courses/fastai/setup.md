@@ -1,49 +1,54 @@
 # Setup
 
-This guide will help setting up fastai on a fresh Ubuntu machine. Also has notes on remote setup
+This guide will help setting up fastai on a fresh Ubuntu 16.04 installation. Also has notes on usage on a remote machine
 
-# 1. Install deps
+## 1. Initial setup
 
 > based on [Main guide](http://files.fast.ai/setup/paperspace) (if not Ubuntu, replace `apt-get` with appropriate package manager)
 
 ```bash
-sudo apt-get update
-sudo apt-get install unzip git -y
-sudo apt-get -y upgrade
+#!/usr/bin/env bash
+
+set -e
+set -o xtrace
+DEBIAN_FRONTEND=noninteractive
+
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y unzip git qtdeclarative5-dev qml-module-qtquick-controls
 sudo apt-get -y autoremove
 sudo ubuntu-drivers autoinstall
 sudo add-apt-repository ppa:graphics-drivers/ppa -y
-```
+sudo apt update
+sudo apt upgrade -y
+sudo ufw allow 8888:8898/tcp
 
-Download `.deb` CUDA from [website](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=deblocal)
+# install cuda
+wget http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu1604_9.0.176-1_amd64.deb
+sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+sudo apt update
+sudo apt install cuda -y
 
-- Probably tick `(y)` on all the prompts (just for safety)
-- If anyting about Noveau, follow [this guide](https://linuxconfig.org/how-to-disable-nouveau-nvidia-driver-on-ubuntu-18-04-bionic-beaver-linux)
-
-```bash
+# install cudnn
 wget http://files.fast.ai/files/cudnn-9.1-linux-x64-v7.tgz
 tar xf cudnn-9.1-linux-x64-v7.tgz
 sudo cp cuda/include/*.* /usr/local/cuda/include/
 sudo cp cuda/lib64/*.* /usr/local/cuda/lib64/
-```
 
-Follow [this guide](https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart) to install Anaconda
+# Install Anaconda
+#### NOTE #### - go to the Anaconda website to get the latest version for Ubuntu 16.04
+wget https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
+bash Anaconda3-5.0.1-Linux-x86_64.sh -b
 
-> note: `bash Anaconda3-5.0.1-Linux-x86_64.sh -b` takes forever, don't freak out if it hangs (maybe try to find detailed output flag?)
-
-```bash
 cd
 git clone https://github.com/fastai/fastai.git
 cd fastai/
-
-echo 'export PATH=~/anaconda3/bin:$PATH' >> ~/.bashrc
 export PATH=~/anaconda3/bin:$PATH
-
-conda update -n base conda
 conda env update
 
+echo 'export PATH=~/anaconda3/bin:$PATH' >> ~/.bashrc
 echo 'source activate fastai' >> ~/.bashrc
-source activate fastai
 source ~/.bashrc
 
 jupyter notebook --generate-config
